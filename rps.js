@@ -1,6 +1,8 @@
 let playerScore = 0;
 let computerScore = 0;
 
+setupGame();
+
 function computerPlay() {
     let randomNumber = Math.floor(Math.random() * 3 + 1);
 
@@ -72,6 +74,59 @@ function game() {
     } else {
         console.log("It's a Draw!");
     }
+}
+
+function setupGame() {
+    const gameContainer = document.querySelector(".container");
+
+    const playerContainer = document.createElement("div");
+    playerContainer.classList.add("player-container");
+    const playerName = document.createElement("p");
+    playerName.textContent = "You";
+    const playerScore = document.createElement("p");
+    playerScore.textContent = "0";
+    playerScore.classList.add("score");
+
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("button-container");
+    const rock = document.createElement("div");
+    rock.textContent = "Rock";
+    rock.classList.add("button");
+    const paper = document.createElement("div");
+    paper.textContent = "Paper";
+    paper.classList.add("button");
+    const scissors = document.createElement("div");
+    scissors.textContent = "Scissors";
+    scissors.classList.add("button");
+
+    const computerContainer = document.createElement("div");
+    computerContainer.classList.add("player-container");
+    const computerName = document.createElement("p");
+    computerName.textContent = "Computer";
+    const computerScore = document.createElement("p");
+    computerScore.textContent = "0";
+    computerScore.classList.add("score");
+    
+    playerContainer.appendChild(playerName);
+    playerContainer.appendChild(playerScore);
+    buttonContainer.appendChild(rock);
+    buttonContainer.appendChild(paper);
+    buttonContainer.appendChild(scissors);
+    computerContainer.appendChild(computerName);
+    computerContainer.appendChild(computerScore);
+    gameContainer.appendChild(playerContainer);
+    gameContainer.appendChild(buttonContainer);
+    gameContainer.appendChild(computerContainer);
+}
+
+function clearGame() {
+    const gameContainer = document.querySelector(".container");
+    const playerContainer = gameContainer.firstElementChild;
+    const buttonContainer = document.querySelector(".button-container");
+    const computerContainer = gameContainer.lastElementChild;
+    gameContainer.removeChild(playerContainer);
+    gameContainer.removeChild(buttonContainer);
+    gameContainer.removeChild(computerContainer);
 }
 
 
