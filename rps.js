@@ -1,8 +1,6 @@
 let playerScore = 0;
 let computerScore = 0;
 
-game();
-
 function computerPlay() {
     let randomNumber = Math.floor(Math.random() * 3 + 1);
 
