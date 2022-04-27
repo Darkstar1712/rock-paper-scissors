@@ -1,7 +1,7 @@
-let playerScore = 0;
-let computerScore = 0;
+let score1 = 0;
+let score2 = 0;
 
-setupGame();
+game();
 
 function computerPlay() {
     let randomNumber = Math.floor(Math.random() * 3 + 1);
@@ -23,68 +23,79 @@ function playRound(playerSelection, computerSelection) {
                 case "rock":
                     return "It's a Draw!";
                 case "paper":
-                    computerScore++;
+                    score2++;
                     return "You Lose! " + computerSelection + " beats " + playerSelection.toLowerCase().charAt(0).toUpperCase() + playerSelection.toLowerCase().slice(1);
                 case "scissors":
-                    playerScore++;
+                    score1++;
                     return "You Win! " + playerSelection.toLowerCase().charAt(0).toUpperCase() + playerSelection.toLowerCase().slice(1) + " beats " + computerSelection; 
             }
             break;
         case "paper":
             switch (computerSelection.toLowerCase()) {
                 case "rock":
-                    playerScore++;
+                    score1++;
                     return "You Win! " + playerSelection.toLowerCase().charAt(0).toUpperCase() + playerSelection.toLowerCase().slice(1) + " beats " + computerSelection;
                 case "paper":
                     return "It's a Draw!";
                 case "scissors":
-                    computerScore++;
+                    score2++;
                     return "You Lose! " + computerSelection + " beats " + playerSelection.toLowerCase().charAt(0).toUpperCase() + playerSelection.toLowerCase().slice(1); 
             }
             break;
         case "scissors":
             switch (computerSelection.toLowerCase()) {
                 case "rock":
-                    computerScore++;
+                    score2++;
                     return "You Lose! " + computerSelection + " beats " + playerSelection.toLowerCase().charAt(0).toUpperCase() + playerSelection.toLowerCase().slice(1);
                 case "paper":
-                    playerScore++;
+                    score1++;
                     return "You Win! " + playerSelection.toLowerCase().charAt(0).toUpperCase() + playerSelection.toLowerCase().slice(1) + " beats " + computerSelection;
                 case "scissors":
                     return "It's a Draw!";  
             }
             break;
-        default:
-            return playRound(prompt("Rock, Paper or Scissors?"), computerSelection);
     }
 }
 
 function game() {
-        for(let i = 0; i < 5; i++) {
-        let playerChoice = prompt("Rock, Paper or Scissors?");
-        let computerChoice = computerPlay();
-        
-        console.log(playRound(playerChoice, computerChoice));
-    }
+    setupGame();
 
-    if (playerScore > computerScore) {
-        console.log("You Win!");
-    } else if (computerScore > playerScore) {
-        console.log("You Lose!");
-    } else {
-        console.log("It's a Draw!");
-    }
+    const buttons = document.querySelectorAll(".button");
+    const playerScore = document.querySelector("#playerScore");
+    const computerScore = document.querySelector("#computerScore");
+    const text = document.querySelector(".text");
+
+    buttons.forEach((button) => {
+        button.addEventListener('click', function(e) {
+            const playerChoice = e.target.textContent;
+            const computerChoice = computerPlay();
+            text.textContent = playRound(playerChoice, computerChoice);
+
+            playerScore.textContent = score1;    
+            computerScore.textContent = score2; 
+
+            if (score1 == 5) {
+                text.textContent = "You Win!";
+                clearGame();
+            } else if (score2 == 5) {
+                text.textContent = "You Lose!";
+                clearGame();
+            }
+        });
+    });
 }
 
 function setupGame() {
-    const gameContainer = document.querySelector(".container");
-
+    const container = document.querySelector(".container");
+    const gameContainer = document.createElement("div");
+    gameContainer.classList.add("gameContainer");
     const playerContainer = document.createElement("div");
     playerContainer.classList.add("player-container");
     const playerName = document.createElement("p");
     playerName.textContent = "You";
     const playerScore = document.createElement("p");
     playerScore.textContent = "0";
+    playerScore.id = "playerScore";
     playerScore.classList.add("score");
 
     const buttonContainer = document.createElement("div");
@@ -105,6 +116,7 @@ function setupGame() {
     computerName.textContent = "Computer";
     const computerScore = document.createElement("p");
     computerScore.textContent = "0";
+    computerScore.id = "computerScore";
     computerScore.classList.add("score");
     
     playerContainer.appendChild(playerName);
@@ -117,16 +129,26 @@ function setupGame() {
     gameContainer.appendChild(playerContainer);
     gameContainer.appendChild(buttonContainer);
     gameContainer.appendChild(computerContainer);
+    container.appendChild(gameContainer);
 }
 
 function clearGame() {
-    const gameContainer = document.querySelector(".container");
-    const playerContainer = gameContainer.firstElementChild;
-    const buttonContainer = document.querySelector(".button-container");
-    const computerContainer = gameContainer.lastElementChild;
-    gameContainer.removeChild(playerContainer);
-    gameContainer.removeChild(buttonContainer);
-    gameContainer.removeChild(computerContainer);
+    const container = document.querySelector(".container");
+    const gameContainer = document.querySelector(".gameContainer");
+    const replay = document.createElement("div");
+    const text = document.querySelector(".text");
+    replay.textContent = "Play Again";
+    replay.classList.add("replay");
+    container.removeChild(gameContainer);
+    container.appendChild(replay);
+
+    replay.addEventListener('click', function (e) {
+        text.textContent = "Please select Rock, Paper or Scissors!"
+        container.removeChild(replay);
+        score1 = 0;
+        score2 = 0;
+        game();
+    });
 }
 
 
